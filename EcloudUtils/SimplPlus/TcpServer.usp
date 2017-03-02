@@ -1,0 +1,61 @@
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+INTEGER_PARAMETER Port;
+
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+DIGITAL_INPUT	Listen;			DIGITAL_OUTPUT	status;
+STRING_INPUT	TX$[1024];		STRING_OUTPUT	RX$;
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+#BEGIN_PARAMETER_PROPERTIES Port
+   propValidUnits=unitDecimal;
+   propBounds=1d,65535d;
+   propDefaultValue=8009d;
+#END_PARAMETER_PROPERTIES
+
+TcpServer server;
+
+PUSH Listen
+{
+	server.listen(Port);
+}
+
+Change TX$
+{
+	server.broadcast(TX$);
+}
+
+Callback Function onConn(String clientIndex)
+{
+	status = 1;
+	TRACE("On Connect:%s",clientIndex);
+}
+
+Callback Function onDiscon(String clientIndex)
+{
+	status = 0;
+	TRACE("On Disconnect:%s",clientIndex);
+}
+
+Callback Function onReceive(String s)
+{
+	RX$ = s;
+}
+
+Function Init()
+{
+	RegisterDelegate(server,OnConnect,onConn);
+	RegisterDelegate(server,OnDisconnect,onDiscon);
+	RegisterDelegate(server,OnRx,onReceive);
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	Init();
+}

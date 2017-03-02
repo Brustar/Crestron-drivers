@@ -1,0 +1,8 @@
+D:\Crestron\EcloudUtils\EcloudUtils\bin\EcloudUtils.dll
+D:\Crestron\EcloudUtils\EcloudUtils\bin\EcloudUtils.pdb
+D:\Crestron\EcloudUtils\EcloudUtils\bin\SimplSharpCustomAttributesInterface.dll
+D:\Crestron\EcloudUtils\EcloudUtils\bin\SimplSharpHelperInterface.dll
+D:\Crestron\EcloudUtils\EcloudUtils\obj\Debug\ResolveAssemblyReference.cache
+D:\Crestron\EcloudUtils\EcloudUtils\obj\Debug\EcloudUtils.dll
+D:\Crestron\EcloudUtils\EcloudUtils\obj\Debug\EcloudUtils.pdb
+D:\Crestron\EcloudUtils\EcloudUtils\bin\SimplSharpCryptographyInterface.dll
