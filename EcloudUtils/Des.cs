@@ -54,7 +54,7 @@ namespace EcloudUtils
         /// </summary>
         /// <param name="text">待加密明文</param>
         /// <returns>加密后的密文</returns>
-        public static string DESDecrypt(string text)
+        public string DESDecrypt(string text)
         {
             return DESDecrypt(text, DesKey);
         }
@@ -64,7 +64,7 @@ namespace EcloudUtils
         /// <param name="text">密文</param>
         /// <param name="sKey">密钥</param>
         /// <returns>解密后的明文</returns>
-        public static string DESDecrypt(string text, string sKey)
+        public string DESDecrypt(string text, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             int len;
@@ -95,12 +95,12 @@ namespace EcloudUtils
             }
         }
 
-        public static byte[] DESDecryptToByte(string text)
+        public byte[] DESDecryptToByte(string text)
         {
             return DESDecryptToByte(text, DesKey);
         }
 
-        public static byte[] DESDecryptToByte(string text, string sKey)
+        public byte[] DESDecryptToByte(string text, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             int len;
@@ -130,7 +130,7 @@ namespace EcloudUtils
         /// <param name="pToEncrypt"></param>  
         /// <param name="sKey"></param>  
         /// <returns></returns>  
-        public  static string MD5Encrypt(string pToEncrypt, string sKey)
+        public string MD5Encrypt(string pToEncrypt, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray = Encoding.Default.GetBytes(pToEncrypt);
@@ -149,7 +149,7 @@ namespace EcloudUtils
         /// <param name="pToDecrypt"></param>  
         /// <param name="sKey"></param>  
         /// <returns></returns>  
-        public static string MD5Decrypt(string pToDecrypt, string sKey)
+        public string MD5Decrypt(string pToDecrypt, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
 

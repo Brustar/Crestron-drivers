@@ -1,0 +1,25 @@
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+STRING_INPUT	EncryptSour$[12];
+STRING_OUTPUT	EncryptDes$;
+
+STRING_INPUT	DecryptSour$[12];
+STRING_OUTPUT	DecryptDes$;
+
+Des des;
+
+Change EncryptSour$
+{
+	EncryptDes$ = des.DESEncrypt(EncryptSour$);
+}
+
+
+Change DecryptSour$
+{
+	DecryptDes$ = des.DESDecrypt(DecryptSour$);
+}
+
