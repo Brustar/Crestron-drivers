@@ -33,7 +33,6 @@ namespace EcloudUtils
             this.server = new TCPServer("0.0.0.0", port, bufferSize, EthernetAdapterType.EthernetLANAdapter, maxClient);
             SocketErrorCodes error = server.WaitForConnectionAsync(onConnect);
 
-            CrestronConsole.Print("error:" + error);
             server.SocketStatusChange += onStatuChange;
         }
 
@@ -41,7 +40,6 @@ namespace EcloudUtils
         {
             if (serverSocketStatus == SocketStatus.SOCKET_STATUS_CONNECTED)
             {
-                CrestronConsole.Print("connect..." + clientIndex);
                 this.clients.Add(clientIndex);
                 if (OnConnect != null)
                 {
@@ -50,8 +48,6 @@ namespace EcloudUtils
             }
             else
             {
-                //todo
-                CrestronConsole.Print("disconnect..." + clientIndex);
                 this.clients.Remove(clientIndex);
                 if (OnDisconnect != null)
                 {
@@ -72,10 +68,9 @@ namespace EcloudUtils
             if (numberOfBytesReceived > 0)
             {
                 String data = System.Text.Encoding.Default.GetString(server.GetIncomingDataBufferForSpecificClient(clientIndex), 0, numberOfBytesReceived);
-                CrestronConsole.Print("recive:" + data);
                 if (OnRx != null)
                 {
-                    OnRx(new SimplSharpString(data));
+                    OnRx((new SimplSharpString(data)).ToString());
                 }
                 server.ReceiveDataAsync(clientIndex, onRead);
             }

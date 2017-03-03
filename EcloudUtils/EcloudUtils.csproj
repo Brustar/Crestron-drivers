@@ -45,6 +45,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json.Compact, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\ProgramData\Crestron\SDK\Newtonsoft.Json.Compact.dll</HintPath>
+    </Reference>
     <Reference Include="SimplSharpCryptographyInterface, Version=1.0.6057.16604, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpCryptographyInterface.dll</HintPath>
@@ -63,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Des.cs" />
+    <Compile Include="JsonUtil.cs" />
     <Compile Include="SceneXML.cs" />
     <Compile Include="SSL.cs" />
     <Compile Include="TcpServer.cs" />
@@ -78,7 +83,7 @@
         <Programmer />
         <ArchiveFilename>D:\Crestron\EcloudUtils\EcloudUtils\bin\EcloudUtils.clz</ArchiveFilename>
         <MinFirmwareVersion>1.007.0017</MinFirmwareVersion>
-        <CompiledOn>2017-03-02 17:04:31</CompiledOn>
+        <CompiledOn>2017-03-03 18:54:29</CompiledOn>
         <AdditionalInfo />
         <EmbedSourceArchive>False</EmbedSourceArchive>
         <CopyTo />

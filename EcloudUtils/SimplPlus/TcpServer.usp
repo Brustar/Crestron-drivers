@@ -1,3 +1,5 @@
+#SYMBOL_NAME "Ecloud MuiltConnect TCP Server"
+
 #DEFAULT_VOLATILE
 #ENABLE_STACK_CHECKING
 #ENABLE_TRACE
@@ -44,6 +46,7 @@ Callback Function onDiscon(String clientIndex)
 
 Callback Function onReceive(String s)
 {
+	TRACE("RECV:%s",s);
 	RX$ = s;
 }
 
