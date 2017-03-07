@@ -67,7 +67,7 @@ namespace EcloudUtils
         {
             if (numberOfBytesReceived > 0)
             {
-                String data = System.Text.Encoding.Default.GetString(server.GetIncomingDataBufferForSpecificClient(clientIndex), 0, numberOfBytesReceived);
+                String data = System.Text.Encoding.BigEndianUnicode.GetString(server.GetIncomingDataBufferForSpecificClient(clientIndex), 0, numberOfBytesReceived);
                 if (OnRx != null)
                 {
                     OnRx((new SimplSharpString(data)).ToString());
@@ -80,7 +80,7 @@ namespace EcloudUtils
         {
             foreach (uint clientIdex in this.clients)
             {
-                byte[] db = System.Text.Encoding.ASCII.GetBytes(data.ToString());
+                byte[] db = System.Text.Encoding.BigEndianUnicode.GetBytes(data.ToString());
                 this.server.SendData(clientIdex,db, db.Length);
             }
         }
