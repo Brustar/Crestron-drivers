@@ -88,15 +88,7 @@ namespace EcloudUtils
                 }
                 i++;
             }
-            byte[] r = new byte[ret.Count];
-            i = 0;
-            foreach (byte b in ret)
-            {
-                r[i] = b;
-                i++;
-            }
-
-            return r;
+            return (byte[])ret.ToArray(typeof(byte));           
         }
 
         public void broadcast(SimplSharpString data)
