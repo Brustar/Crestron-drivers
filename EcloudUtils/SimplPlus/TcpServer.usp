@@ -28,7 +28,7 @@ PUSH Listen
 }
 
 Change TX$
-{
+{	
 	server.broadcast(TX$);
 }
 
@@ -44,11 +44,30 @@ Callback Function onDiscon(String clientIndex)
 	TRACE("On Disconnect:%s",clientIndex);
 }
 
-Callback Function onReceive(String s)
+STRING_FUNCTION trans(string s)
 {
-	TRACE("RECV:%s",s);
-	RX$ = s;
+	integer i;
+	string temp[100];
+	string t1[2];
+	string t2[2];
+	string ret[100];
+	for(i=1 to len(s))
+	{
+		makestring(temp,"%04x",byte(s,i));
+		t1 = chr(HexToI(MID(temp, 1 , 2)));
+		t2 = chr(HexToI(MID(temp, 3 , 2)));
+		ret=ret+t1+t2;
+	}
+
+	return (ret);
 }
+
+
+Callback Function onReceive(String s)
+{	
+	RX$ = trans(s);
+}
+
 
 Function Init()
 {

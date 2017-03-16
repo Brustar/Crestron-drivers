@@ -76,11 +76,34 @@ namespace EcloudUtils
             }
         }
 
+        private byte[] trans(byte[] data)
+        {
+            ArrayList ret = new ArrayList();
+            int i = 0;
+            foreach (byte b in data)
+            {
+                if (i % 2 == 1)
+                {
+                    ret.Add(b);   
+                }
+                i++;
+            }
+            byte[] r = new byte[ret.Count];
+            i = 0;
+            foreach (byte b in ret)
+            {
+                r[i] = b;
+                i++;
+            }
+
+            return r;
+        }
+
         public void broadcast(SimplSharpString data)
         {
             foreach (uint clientIdex in this.clients)
             {
-                byte[] db = System.Text.Encoding.BigEndianUnicode.GetBytes(data.ToString());
+                byte[] db = this.trans(System.Text.Encoding.BigEndianUnicode.GetBytes(data.ToString()));
                 this.server.SendData(clientIdex,db, db.Length);
             }
         }
