@@ -61,17 +61,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpHelperInterface.dll</HintPath>
     </Reference>
+    <Reference Include="SimplSharpSQLHelperInterface, Version=1.0.92.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpSQLHelperInterface.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Db.cs" />
     <Compile Include="Des.cs" />
+    <Compile Include="Http.cs" />
     <Compile Include="JsonUtil.cs" />
+    <Compile Include="Nest.cs" />
     <Compile Include="SceneXML.cs" />
     <Compile Include="SSL.cs" />
     <Compile Include="TcpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Txt.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
@@ -83,7 +91,7 @@
         <Programmer />
         <ArchiveFilename>D:\Crestron\EcloudUtils\EcloudUtils\bin\EcloudUtils.clz</ArchiveFilename>
         <MinFirmwareVersion>1.007.0017</MinFirmwareVersion>
-        <CompiledOn>2017-03-16 17:01:52</CompiledOn>
+        <CompiledOn>2017/3/16 17:01:52</CompiledOn>
         <AdditionalInfo />
         <EmbedSourceArchive>False</EmbedSourceArchive>
         <CopyTo />
