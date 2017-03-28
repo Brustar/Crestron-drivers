@@ -123,10 +123,10 @@ namespace EcloudUtils
             doGet(url, ht);
         }
 
-        public string[] handleNestStatus(string json,string room)
+        public string handleNestStatus(string json, string room)
         {
-            string[] temp = new string[2];
-            var obj = JObject.Parse(json);
+            string temp="";
+            var obj = JObject.Parse(json.ToString());
             var nestuct = obj["structure"];
             var devices = nestuct["devices"];
             foreach(var o in devices)
@@ -135,10 +135,9 @@ namespace EcloudUtils
                 string temperature = obj["shared"][deviceID]["current_temperature"].ToString();
                 string humidity = obj["shared"][deviceID]["current_humidity"].ToString();
                 string where = obj["shared"][deviceID]["where"].ToString();
-                if (where == room)
+                if (where == room.ToString())
                 {
-                    temp[0] = temperature;
-                    temp[1] = humidity;
+                    temp = temperature + "," + humidity;
                 }
             }
             return temp;
