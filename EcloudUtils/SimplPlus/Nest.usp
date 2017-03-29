@@ -1,0 +1,76 @@
+#SYMBOL_NAME "Ecloud Nest"
+
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+STRING_PARAMETER username[256];
+STRING_PARAMETER password[256];
+
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+STRING_INPUT	room[256];			DIGITAL_OUTPUT	status;
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+#BEGIN_PARAMETER_PROPERTIES username
+   propDefaultValue="156810316@qq.com";
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES password
+   propDefaultValue="Stone4shi!";
+#END_PARAMETER_PROPERTIES
+
+Db db;
+SSL https;
+
+CHANGE room
+{
+	while(1)
+	{
+		wait(100*60*10)
+		{
+			https.doPost(username,password);
+		}
+	}
+}
+ 
+Callback Function onResponse(String s)
+{	
+	string sql[100];
+	string states[32];
+	INTEGER index;
+	string flag[32];
+	sql="create table if not exists nest(room varchar(20),temperatue varchar(10),humidity varchar(10))";	
+	db.initDB(sql);
+    states = https.handleNestStatus(s,room);
+	if(states != "")
+	{
+		sql = "select room from nest where room = '"+room+"'";
+		flag = db.singleQuery(sql);
+		if(flag != "")
+		{	
+			index = FIND(",", states);
+			sql = "update nest set temperatue=" + MID(states,1,index) + ",humidity=" + MID(states,index+1,LEN(states)) + " where room='" + room + "'";
+		}else{
+			sql = "insert into nest values('" + room + "'," + states + ")";
+		}
+		status = db.insert(sql);
+	}else{
+		status = -1;
+	}
+}
+
+
+Function Init()
+{
+	RegisterDelegate(https,OnRes,onResponse);
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	Init();
+}
+

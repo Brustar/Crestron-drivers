@@ -1,0 +1,26 @@
+#SYMBOL_NAME "Ecloud DB query"
+
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+STRING_PARAMETER sql[256];
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+DIGITAL_INPUT	start;			STRING_OUTPUT	OUT$;
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+#BEGIN_PARAMETER_PROPERTIES sql
+   propDefaultValue="select state from deviceState where name=''";
+#END_PARAMETER_PROPERTIES
+
+
+Db db;
+
+PUSH start
+{
+	db.init();
+	OUT$ = db.singleQuery(sql);
+}

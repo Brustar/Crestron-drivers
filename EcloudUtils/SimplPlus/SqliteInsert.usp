@@ -1,0 +1,27 @@
+#SYMBOL_NAME "Ecloud DB insert"
+
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+STRING_PARAMETER sql[256];
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+DIGITAL_INPUT	start;			DIGITAL_OUTPUT	status;
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+#BEGIN_PARAMETER_PROPERTIES sql
+   propDefaultValue="insert into devicestate values('',1)";
+#END_PARAMETER_PROPERTIES
+
+Db db;
+
+PUSH start
+{
+	string tsql[100];
+	tsql="create table if not exists deviceState(name varchar(20),state int)";	
+	db.initDB(tsql);
+	status = db.insert(sql);
+}

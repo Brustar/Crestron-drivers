@@ -1,0 +1,117 @@
+#SYMBOL_NAME "Pesa Switcher - 8 Levels"
+
+    #HINT "Creates Pesa CPU-Link H command for Switching"
+
+ 
+
+    /******************************************************************
+
+      DIGITAL, ANALOG and SERIAL INPUTS and OUTPUTS
+
+    ******************************************************************/
+
+    // Digital trigger from the SIMPL program - this sends the command
+
+    // string out.
+
+    DIGITAL_INPUT TRIG;
+
+    // Analogs for the output and 8 levels of the switcher from the
+
+    // SIMPL program.
+
+    ANALOG_INPUT
+
+    OUTPUT,LEVEL1,LEVEL2,LEVEL3,LEVEL4,LEVEL5,LEVEL6,LEVEL7,LEVEL8;
+
+    // The output string that is to be sent from the SIMPL+ program to
+
+    // the SIMPL program to the switcher.
+
+    STRING_OUTPUT COMMAND$;
+
+ 
+
+    /******************************************************************
+
+      Global Variables
+
+      (Uncomment and declare global variables as needed)
+
+    ******************************************************************/
+
+    INTEGER I, COUNT, CKSLOW, CKSHI;
+
+    STRING PESABUF[30];
+
+ 
+
+    /******************************************************************
+
+      Event Handlers
+
+      (Uncomment and declare additional event handlers as needed)
+
+    ******************************************************************/
+
+    PUSH TRIG  
+
+    {
+
+      // Format command which stores the switcher command in a
+
+      // temporary buffer. A Command looks like H{out}{l1}{l2}...{l8}
+
+      // {2 byte checksum}{CR}{LF} where {out} and {l1}..{l8} are 3
+
+      // digit ASCII bytes with leading 0s. An example is
+
+      // H001001002003004005006007008{2 bytes checksum}{CR}{LF}
+
+      // makestring(PESABUF,"H%03d%03d%03d%03d%03d%03d%03d%03d%03d",
+
+      // OUTPUT, LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6,
+
+      // LEVEL7, LEVEL8);
+
+ 
+
+        COUNT=0;  // Checksum count initialized to 0.
+
+        // Add each byte in the string to the running count.
+
+        for(i=1 to len(pesabuf))
+
+            COUNT = COUNT + BYTE(PESABUF, I);
+
+ 
+
+    // The checksum is computed by taking the COUNT and throwing
+
+        // away all but the lower byte. The upper nibble + '0' is the
+
+        // high order checksum byte, the lower nibble + '0' is the low
+
+        // order checksum byte.
+
+ 
+
+        // Compute the low byte of the checksum.
+
+        CKSLOW = (COUNT & 0x0F) + '0';
+
+        // Compute the high byte of the checksum.
+
+        CKSHI = ((COUNT & 0xF0) >> 4) + '0';
+
+ 
+
+        // Send the checksum command to the COMMAND$ that gets routed
+
+        // to the switcher via the SIMPL program.
+
+        makestring(COMMAND$, "%s%s%s", PESABUF, CHR(CKSLOW),
+
+        CHR(CKSHI));
+
+    }
