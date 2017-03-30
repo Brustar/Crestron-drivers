@@ -20,13 +20,13 @@ namespace EcloudUtils
             string temperature = getTemperature(obj, deviceid);
             string state = obj["shared"][deviceid]["target_temperature_type"].ToString();
 
-            Room o = new Room();
+            Room o = new {
             o.room = room;
             o.temperature = temperature;
             o.humidity = humidity;
             o.deviceState = state;
             o.id = id;
-
+            }
             return JsonConvert.SerializeObject(o);
         }
         public static string getUserID(JObject obj)
