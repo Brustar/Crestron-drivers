@@ -20,7 +20,7 @@ namespace EcloudUtils
             string temperature = getTemperature(obj, deviceid);
             string state = obj["shared"][deviceid]["target_temperature_type"].ToString();
 
-            Room o = new {
+            var o = new {
             room = room;
             temperature = temperature;
             humidity = humidity;
