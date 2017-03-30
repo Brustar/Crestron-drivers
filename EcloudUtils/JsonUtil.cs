@@ -29,6 +29,7 @@ namespace EcloudUtils
             }
             return JsonConvert.SerializeObject(o);
         }
+        
         public static string getUserID(JObject obj)
         {
             string result = "";
@@ -41,6 +42,7 @@ namespace EcloudUtils
             result = result.Substring(i + 1);
             return result;
         }
+        
         public static string getSerial(JObject obj,string userid)
         {
             string result = "";
@@ -56,6 +58,7 @@ namespace EcloudUtils
             }
             return result;
         }
+        
         public static string getRoomId(JObject obj, string serial, string room)
         {
             string result = "";
@@ -69,6 +72,7 @@ namespace EcloudUtils
             }
             return result;
         }
+        
         public static string gethumidity(JObject obj, string id)
         {
             string result = "";
@@ -82,6 +86,7 @@ namespace EcloudUtils
             }
             return result;
         }
+        
         public static string getDeviceId(JObject obj, string id)
         {
             string result = "";
@@ -96,26 +101,13 @@ namespace EcloudUtils
             }
             return result;
         }
+        
         public static string getTemperature(JObject obj, string deviceid)
         {
             string result = "";
             result = obj["shared"][deviceid]["current_temperature"].ToString();
             return result;
         }
-        public static string ReadFile(string Path)
-        {
-            string s = "";
-            if (!System.IO.File.Exists(Path))
-                s = "不存在相应的目录";
-            else
-            {
-                StreamReader f2 = new StreamReader(Path, System.Text.Encoding.GetEncoding("gb2312"));
-                s = f2.ReadToEnd();
-                f2.Close();
-                f2.Dispose();
-            }
-            return s;
-        }
-
+        
     }
 }
