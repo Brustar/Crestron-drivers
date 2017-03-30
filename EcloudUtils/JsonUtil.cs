@@ -18,8 +18,8 @@ namespace EcloudUtils
             string humidity = gethumidity(obj, id);
             string deviceid = getDeviceId(obj, id);
             string temperature = getTemperature(obj, deviceid);
-            string state = obj["shared"][deviceid]["target_temperature_type"].ToString();
-
+            //string state = obj["shared"][deviceid]["target_temperature_type"].ToString();
+            /*
             var o = new {
             room = room;
             temperature = temperature;
@@ -28,6 +28,8 @@ namespace EcloudUtils
             id = id;
             }
             return JsonConvert.SerializeObject(o);
+            */
+            return temperature + "," + humidity;
         }
         
         public static string getUserID(JObject obj)
