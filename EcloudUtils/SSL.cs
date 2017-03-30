@@ -125,22 +125,8 @@ namespace EcloudUtils
 
         public string handleNestStatus(string json, string room)
         {
-            string temp="";
             var obj = JObject.Parse(json.ToString());
-            var nestuct = obj["structure"];
-            var devices = nestuct["devices"];
-            foreach(var o in devices)
-            {
-                string deviceID = o.ToString().Substring(7);
-                string temperature = obj["shared"][deviceID]["current_temperature"].ToString();
-                string humidity = obj["shared"][deviceID]["current_humidity"].ToString();
-                string where = obj["shared"][deviceID]["where"].ToString();
-                if (where == room.ToString())
-                {
-                    temp = temperature + "," + humidity;
-                }
-            }
-            return temp;
+            return JsonUtil.getStateByRoom(obj, room);;
         }
 
     }
