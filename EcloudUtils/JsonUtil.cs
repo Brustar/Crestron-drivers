@@ -35,13 +35,12 @@ namespace EcloudUtils
         public static string getUserID(JObject obj)
         {
             string result = "";
-            var user = obj["user"];
+            JObject user = (JObject)obj["user"];
+
             foreach (var item in user)
             {
-                result = item.Path;
+                result = item.Key;
             }
-            int i = result.IndexOf('.');
-            result = result.Substring(i + 1);
             return result;
         }
         
@@ -92,13 +91,12 @@ namespace EcloudUtils
         public static string getDeviceId(JObject obj, string id)
         {
             string result = "";
-            var device = obj["device"];
+            JObject device = (JObject)obj["device"];
             foreach (var key in device)
             {
-                if (key.First["where_id"].ToString() == id)
+                if (key.Value["where_id"].ToString() == id)
                 {
-                    result = key.Path;
-                    result = result.Substring(result.IndexOf('.') + 1);
+                    result = key.Key;
                 }
             }
             return result;

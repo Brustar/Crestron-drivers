@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Crestron.SimplSharp;
-using System.XML;
+using Crestron.SimplSharp.CrestronXml;
 using Crestron.SimplSharp.CrestronXmlLinq;
 
 namespace EcloudUtils
@@ -12,7 +12,8 @@ namespace EcloudUtils
     {
         private static string readXML(string filePath)
 		{
-			XElement xe = XElement.Load(filePath);
+            XmlReader reader = XmlReader.Create(filePath);
+            XElement xe = XElement.Load(reader);
 			IEnumerable<XElement> elements = from ele in 
 				xe.Elements("dict").Elements("array").Elements("dict")
 				                                                select ele;
