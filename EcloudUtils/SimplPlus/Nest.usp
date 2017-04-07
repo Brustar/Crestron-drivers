@@ -6,11 +6,13 @@
 
 STRING_PARAMETER username[256];
 STRING_PARAMETER password[256];
+STRING_PARAMETER room[256];
 
 DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
 DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
 
-STRING_INPUT	room[256];			DIGITAL_OUTPUT	status;
+DIGITAL_INPUT	enable;			DIGITAL_OUTPUT	status;
 
 #USER_SIMPLSHARP_LIBRARY "EcloudUtils"
 
@@ -22,9 +24,18 @@ STRING_INPUT	room[256];			DIGITAL_OUTPUT	status;
    propDefaultValue="Stone4shi!";
 #END_PARAMETER_PROPERTIES
 
+#BEGIN_PARAMETER_PROPERTIES room
+   propDefaultValue="bedroom";
+#END_PARAMETER_PROPERTIES
+
 Db db;
 SSL https;
 
+push enable
+{
+    https.doPost(username,password);
+}
+/*
 CHANGE room
 {
 	while(1)
@@ -35,7 +46,7 @@ CHANGE room
 		}
 	}
 }
- 
+*/ 
 Callback Function onResponse(String s)
 {	
 	string sql[100];
