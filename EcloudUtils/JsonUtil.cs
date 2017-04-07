@@ -92,11 +92,11 @@ namespace EcloudUtils
         {
             string result = "";
             JObject device = (JObject)obj["device"];
-            foreach (var key in device)
+            foreach (var item in device)
             {
-                if (key.Value["where_id"].ToString() == id)
+                if (item.Value["where_id"].ToString() == id)
                 {
-                    result = key.Key;
+                    result = item.Key;
                 }
             }
             return result;
