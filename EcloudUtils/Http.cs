@@ -56,11 +56,27 @@ namespace EcloudUtils
             this.request(url, param, RequestType.Post);
         }
 
-        private void checkPath(String filename)
+        private string checkPath(String filename)
         {
             String dir = Path.GetDirectoryName(filename);
             if (!Directory.Exists(dir))
                 Directory.Create(dir);
+            if (!File.Exists(filename))
+            {
+                return "";
+            }
+            else
+            {
+                return MD5.FileMD5HashCreateWithPath(filename);
+            }
+        }
+
+        public void prepareDownload(string fileName)
+        {
+            string md5 = checkPath(fileName);
+            string url = "http://115.82.151.85:8082/Cloud/download_plist";
+            string param =  "filename=" + fileName + "&md5=" + md5;
+            post(url,param);
         }
 
         public uint download(String url, String filename)
@@ -69,7 +85,6 @@ namespace EcloudUtils
 
             try
             {
-                checkPath(filename);
                 HttpClient client = new HttpClient();
                 int result = client.FgetFile(url, filename);
                 if (result != 0)
@@ -93,8 +108,5 @@ namespace EcloudUtils
             return sz;
         }
 
-        public void handleHttp(string json)
-        {
-        }
     }
 }

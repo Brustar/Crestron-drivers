@@ -108,6 +108,14 @@ namespace EcloudUtils
             result = obj["shared"][deviceid]["current_temperature"].ToString();
             return result;
         }
+
+        public string parseURL(string json)
+        {
+            string ret = "";
+            var obj = JObject.Parse(json.ToString());
+            ret = obj["url"].ToString();
+            return ret;
+        }
         
     }
 }

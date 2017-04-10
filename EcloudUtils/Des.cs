@@ -125,12 +125,12 @@ namespace EcloudUtils
         }
 
         /// <summary>  
-        /// DES加密  
+        /// 加密  
         /// </summary>  
         /// <param name="pToEncrypt"></param>  
         /// <param name="sKey"></param>  
         /// <returns></returns>  
-        public string MD5Encrypt(string pToEncrypt, string sKey)
+        public string encrypt(string pToEncrypt, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray = Encoding.Default.GetBytes(pToEncrypt);
@@ -144,12 +144,12 @@ namespace EcloudUtils
             return Convert.ToBase64String(ms.ToArray());
         }
         /// <summary>  
-        /// DES解密  
+        /// 解密  
         /// </summary>  
         /// <param name="pToDecrypt"></param>  
         /// <param name="sKey"></param>  
         /// <returns></returns>  
-        public string MD5Decrypt(string pToDecrypt, string sKey)
+        public string decrypt(string pToDecrypt, string sKey)
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
 
@@ -164,5 +164,37 @@ namespace EcloudUtils
             return Encoding.Default.GetString(ms.ToArray(), 0, ms.ToArray().Length - 1);
         }
     
+    }
+
+    public class MD5
+    {
+        private static string MD5Buffer(byte[] MD5File, int index, int count)
+        {
+            MD5CryptoServiceProvider get_md5 = new MD5CryptoServiceProvider();
+            byte[] hash_byte = get_md5.ComputeHash(MD5File, index, count);
+            string result = System.BitConverter.ToString(hash_byte);
+
+            result = result.Replace("-", "");
+            return result;
+        }
+
+        public static string FileMD5HashCreateWithPath(string path)
+        {
+            string result = "";
+            try
+            {
+                FileStream get_file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+                byte[] md5File = new byte[get_file.Length];                                      // 读入文件
+                get_file.Read(md5File, 0, (int)get_file.Length);
+                get_file.Close();
+
+                result = MD5Buffer(md5File, 0, md5File.Length);
+            }
+            catch
+            {
+                return "";
+            }
+            return result.ToUpper();
+        }
     }
 }
