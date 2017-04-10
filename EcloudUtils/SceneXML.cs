@@ -50,12 +50,12 @@ namespace EcloudUtils
             return ret.Substring(0,ret.Length-1);
         }
 
-        public string parseKeyToSceneID(string filePath,string key)
+        public string parseKeyToSceneID(string filePath,int key)
         {
             XElement xe = readXML(filePath);
             IEnumerable<XElement> elements = from e in xe.Descendants("dict")
                                              where (e.Element("key").Value == "keyID"
-                                             && e.Elements("integer").First().Value == key)
+                                             && e.Elements("integer").First().Value == Convert.ToString(key))
                                              select e;
             return elements.First().Elements("integer").Last().Value;
         }
