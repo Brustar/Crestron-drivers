@@ -8,6 +8,7 @@ using Crestron.SimplSharp;
 using Crestron.SimplSharp.Net.Https;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Crestron.SimplSharp.CrestronIO;
 
 namespace EcloudUtils
 {
@@ -18,12 +19,19 @@ namespace EcloudUtils
 
         public void doPost(string username,string password)
         {
+            if (!File.Exists(Txt.path))
+            {
+                File.Create(Txt.path);
+            }
+
             string userdefault = Txt.read(Txt.path);
+            CrestronConsole.PrintLine("userdefault: " + userdefault);
             if (userdefault != "")
             {
                 JObject obj = JObject.Parse(userdefault);
 
                 string expire = obj["expires_in"].ToString();
+                expire = expire.Substring(1, expire.Length - 2);
                 DateTime exp = DateTime.Parse(expire);
                 if (exp.CompareTo(DateTime.Now) < 0)
                 {
@@ -34,6 +42,7 @@ namespace EcloudUtils
 
             string url = "https://home.nest.com/user/login";
             url = url + "?username=" + username + "&password=" + password;
+            CrestronConsole.PrintLine("Https doPost url: " + url);
             HttpsClient client = new HttpsClient();
             client.Verbose = false;
             client.PeerVerification = false;
@@ -51,7 +60,7 @@ namespace EcloudUtils
                     {
                         // success
                         string s = hscrs.ContentString.ToString();
-                        CrestronConsole.Print("Https Data: " + s + "\n");
+                        CrestronConsole.PrintLine("Https Data: " + s);
                         handleLogin(s);
                     }
                 }
@@ -65,6 +74,7 @@ namespace EcloudUtils
 
         public void doGet(string url, Hashtable header)
         {
+            CrestronConsole.PrintLine("Https doGet url: " + url);
             HttpsClient client = new HttpsClient();
             client.Verbose = false;
             client.PeerVerification = false;
@@ -109,12 +119,19 @@ namespace EcloudUtils
             string user = obj["user"].ToString();
             string user_id = obj["userid"].ToString();
             string expire = obj["expires_in"].ToString();
+
+            token = token.Substring(1, token.Length - 2);
+            user = user.Substring(1, user.Length - 2);
+            user_id = user_id.Substring(1, user_id.Length - 2);
+            expire = expire.Substring(1, expire.Length - 2);
+
             DateTime exp = DateTime.Parse(expire);
             if (exp.CompareTo(DateTime.Now) >= 0)
             {
                 Txt.write(Txt.path,json);
             }
             string url = obj["urls"]["transport_url"].ToString();
+            url = url.Substring(1, url.Length - 2);
             url = url + "/v3/mobile/" + user;
             Hashtable ht = new Hashtable();
             ht.Add("X-nl-protocol-version", "1");
