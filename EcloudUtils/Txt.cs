@@ -27,7 +27,17 @@ namespace EcloudUtils
         public static string read(string txtPath)
         {
             StringBuilder sb = new StringBuilder();
-            StreamReader objReader = new StreamReader(txtPath, System.Text.Encoding.Default);
+            StreamReader objReader;
+            if (!File.Exists(Txt.path))
+            {
+                FileStream stream = File.Create(Txt.path);
+                objReader = new StreamReader(stream, System.Text.Encoding.Default);
+            }
+            else
+            {
+                objReader = new StreamReader(txtPath, System.Text.Encoding.Default);
+            }
+
             string sLine = "";
             while (!objReader.EndOfStream)
             {

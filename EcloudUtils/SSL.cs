@@ -19,13 +19,7 @@ namespace EcloudUtils
 
         public void doPost(string username,string password)
         {
-            if (!File.Exists(Txt.path))
-            {
-                File.Create(Txt.path);
-            }
-
             string userdefault = Txt.read(Txt.path);
-            CrestronConsole.PrintLine("userdefault: " + userdefault);
             if (userdefault != "")
             {
                 JObject obj = JObject.Parse(userdefault);
@@ -42,7 +36,6 @@ namespace EcloudUtils
 
             string url = "https://home.nest.com/user/login";
             url = url + "?username=" + username + "&password=" + password;
-            CrestronConsole.PrintLine("Https doPost url: " + url);
             HttpsClient client = new HttpsClient();
             client.Verbose = false;
             client.PeerVerification = false;
@@ -74,7 +67,6 @@ namespace EcloudUtils
 
         public void doGet(string url, Hashtable header)
         {
-            CrestronConsole.PrintLine("Https doGet url: " + url);
             HttpsClient client = new HttpsClient();
             client.Verbose = false;
             client.PeerVerification = false;
