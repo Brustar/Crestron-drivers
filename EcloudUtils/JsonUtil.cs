@@ -36,7 +36,6 @@ namespace EcloudUtils
         {
             string result = "";
             JObject user = (JObject)obj["user"];
-
             foreach (var item in user)
             {
                 result = item.Key;
@@ -47,11 +46,12 @@ namespace EcloudUtils
         public static string getSerial(JObject obj,string userid)
         {
             string result = "";
-            JToken buckets = obj["buckets"][userid]["buckets"];
-            var cs = buckets.Children<JToken>();
-            foreach (var j in cs)
+            JToken buckets = (JToken)obj["buckets"][userid]["buckets"];
+            var cs = buckets.Children();
+            foreach (var item in cs)
             {
-                if (j.ToString().StartsWith("where."))
+                string j = trimQuot(item.ToString());
+                if (j.StartsWith("where."))
                 {
                     int i = j.ToString().IndexOf('.');
                     result = j.ToString().Substring(i + 1);
@@ -66,7 +66,8 @@ namespace EcloudUtils
             var wheres = obj["where"][serial]["wheres"];
             foreach (var key in wheres)
             {
-                if (key["name"].ToString() == room)
+                string temp = trimQuot(key["name"].ToString());
+                if (temp == room)
                 {
                     result = key["where_id"].ToString();
                 }
@@ -80,6 +81,7 @@ namespace EcloudUtils
             var device = obj["device"];
             foreach (var key in device)
             {
+                string temp = trimQuot(key.First["where_id"].ToString());
                 if (key.First["where_id"].ToString() == id)
                 {
                     result = key.First["current_humidity"].ToString();
@@ -94,6 +96,7 @@ namespace EcloudUtils
             JObject device = (JObject)obj["device"];
             foreach (var item in device)
             {
+                string temp = trimQuot(item.Value["where_id"].ToString());
                 if (item.Value["where_id"].ToString() == id)
                 {
                     result = item.Key;
@@ -115,6 +118,15 @@ namespace EcloudUtils
             var obj = JObject.Parse(json.ToString());
             ret = obj["url"].ToString();
             return ret;
+        }
+
+        public static string trimQuot(string data)
+        {
+            if (data.StartsWith("\"") && data.EndsWith("\""))
+            {
+                data = data.Substring(1, data.Length - 2);
+            }
+            return data;
         }
         
     }

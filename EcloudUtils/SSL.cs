@@ -33,7 +33,7 @@ namespace EcloudUtils
                 string expire = obj["expires_in"].ToString();
                 expire = expire.Substring(1, expire.Length - 2);
                 DateTime exp = DateTime.Parse(expire);
-                if (exp.CompareTo(DateTime.Now) < 0)
+                if (exp.CompareTo(DateTime.Now) > 0)
                 {
                     handleLogin(userdefault);
                     return;
@@ -120,10 +120,10 @@ namespace EcloudUtils
             string user_id = obj["userid"].ToString();
             string expire = obj["expires_in"].ToString();
 
-            token = token.Substring(1, token.Length - 2);
-            user = user.Substring(1, user.Length - 2);
-            user_id = user_id.Substring(1, user_id.Length - 2);
-            expire = expire.Substring(1, expire.Length - 2);
+            token = JsonUtil.trimQuot(token);
+            user = JsonUtil.trimQuot(user);
+            user_id = JsonUtil.trimQuot(user_id);
+            expire = JsonUtil.trimQuot(expire);
 
             DateTime exp = DateTime.Parse(expire);
             if (exp.CompareTo(DateTime.Now) >= 0)
@@ -131,7 +131,7 @@ namespace EcloudUtils
                 Txt.write(Txt.path,json);
             }
             string url = obj["urls"]["transport_url"].ToString();
-            url = url.Substring(1, url.Length - 2);
+            url = JsonUtil.trimQuot(url);
             url = url + "/v3/mobile/" + user;
             Hashtable ht = new Hashtable();
             ht.Add("X-nl-protocol-version", "1");
@@ -142,8 +142,8 @@ namespace EcloudUtils
 
         public string handleNestStatus(string json, string room)
         {
-            var obj = JObject.Parse(json.ToString());
-            return JsonUtil.getStateByRoom(obj, room);;
+            var obj = JObject.Parse(json);
+            return JsonUtil.getStateByRoom(obj, room);
         }
 
     }

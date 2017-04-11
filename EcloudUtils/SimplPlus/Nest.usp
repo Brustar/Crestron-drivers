@@ -56,6 +56,7 @@ Callback Function onResponse(String s)
 	sql="create table if not exists nest(room varchar(20),temperatue varchar(10),humidity varchar(10))";	
 	db.initDB(sql);
     states = https.handleNestStatus(s,room);
+	trace("states:%s",states);
 	if(states != "")
 	{
 		sql = "select room from nest where room = '"+room+"'";
