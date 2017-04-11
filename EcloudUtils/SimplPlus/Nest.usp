@@ -53,7 +53,7 @@ Callback Function onResponse(String s)
 	string states[32];
 	INTEGER index;
 	string flag[32];
-	sql="create table if not exists nest(room varchar(20),temperatue varchar(10),humidity varchar(10))";	
+	sql="create table if not exists nest(room varchar(20),temperatue integer,humidity integer)";	
 	db.initDB(sql);
     states = https.handleNestStatus(s,room);
 	trace("states:%s",states);
