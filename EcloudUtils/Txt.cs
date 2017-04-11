@@ -30,7 +30,7 @@ namespace EcloudUtils
 
             if (!File.Exists(Txt.path))
             {
-                FileStream stream = File.Create(Txt.path);
+                File.Create(Txt.path);
                 return "";
             }
             else
