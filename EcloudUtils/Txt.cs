@@ -27,28 +27,27 @@ namespace EcloudUtils
         public static string read(string txtPath)
         {
             StringBuilder sb = new StringBuilder();
-            StreamReader objReader;
+
             if (!File.Exists(Txt.path))
             {
                 FileStream stream = File.Create(Txt.path);
-                objReader = new StreamReader(stream, System.Text.Encoding.Default);
+                return "";
             }
             else
             {
-                objReader = new StreamReader(txtPath, System.Text.Encoding.Default);
-            }
-
-            string sLine = "";
-            while (!objReader.EndOfStream)
-            {
-                sLine = objReader.ReadLine();
-                if (sLine != null && !sLine.Equals(""))
+                StreamReader objReader = new StreamReader(txtPath, System.Text.Encoding.Default);
+                string sLine = "";
+                while (!objReader.EndOfStream)
                 {
-                    sb.Append(sLine + "\r\n");
+                    sLine = objReader.ReadLine();
+                    if (sLine != null && !sLine.Equals(""))
+                    {
+                        sb.Append(sLine + "\r\n");
+                    }
                 }
+                objReader.Close();
+                return sb.ToString();
             }
-            objReader.Close();
-            return sb.ToString();
         }
     }
 }
