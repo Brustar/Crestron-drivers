@@ -19,7 +19,6 @@ namespace EcloudUtils
             {
                 url = url + "?" + param;
             }
-            CrestronConsole.PrintLine("url: " + url);
             HttpClient client = new HttpClient();
             client.Verbose = false;
             HttpClientRequest request = new HttpClientRequest();
@@ -28,8 +27,6 @@ namespace EcloudUtils
             request.RequestType = method;
             client.DispatchAsync(request, (hscrs, e) =>
             {
-                CrestronConsole.PrintLine("hscrs: " + hscrs);
-                CrestronConsole.PrintLine("Code: " + hscrs.Code);
                 try
                 {
                     if (hscrs.Code >= 200 && hscrs.Code < 300)
@@ -63,7 +60,6 @@ namespace EcloudUtils
         private string checkPath(String filename)
         {
             String dir = Path.GetDirectoryName(filename);
-            CrestronConsole.PrintLine("dir: " + dir);
             if (!Directory.Exists(dir))
                 Directory.Create(dir);
             if (!File.Exists(filename))
@@ -81,21 +77,19 @@ namespace EcloudUtils
             string md5 = checkPath(fileName);
             string url = "http://115.28.151.85:8082/Cloud/download_plist.aspx";
             string param =  "filename=" + Path.GetFileName(fileName) + "&md5=" + md5;
-            CrestronConsole.PrintLine("param: " + param);
             post(url,param);
         }
 
         public uint download(String url, String filename)
         {
             uint sz;
-
             try
             {
                 HttpClient client = new HttpClient();
                 int result = client.FgetFile(url, filename);
                 if (result != 0)
                 {
-                    CrestronConsole.PrintLine("Transfer failed - " + result.ToString());
+                    CrestronConsole.PrintLine("Transfer failed : " + result.ToString());
                     return 0;
                 }
             }
@@ -105,7 +99,7 @@ namespace EcloudUtils
                 return 0;
             }
 
-            CrestronConsole.PrintLine("Success.");
+            CrestronConsole.PrintLine("Download Success.");
 
             FileInfo fi = new FileInfo(filename);
             sz = (uint)fi.Length;

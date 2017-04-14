@@ -52,11 +52,14 @@ namespace EcloudUtils
 
         public string parseKeyToSceneID(string filePath,int key)
         {
+            CrestronConsole.PrintLine("filePath:" + filePath);
             XElement xe = readXML(filePath);
+            CrestronConsole.PrintLine("-------");
             IEnumerable<XElement> elements = from e in xe.Descendants("dict")
                                              where (e.Element("key").Value == "keyID"
                                              && e.Elements("integer").First().Value == Convert.ToString(key))
                                              select e;
+            CrestronConsole.PrintLine("-------1" + elements.First().Elements("integer").Last().Value);
             return elements.First().Elements("integer").Last().Value;
         }
 

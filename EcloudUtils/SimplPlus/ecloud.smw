@@ -1832,7 +1832,7 @@ tO=4
 O4=5
 mP=3
 P1=
-P2=258
+P2=255
 P3=1
 ]
 [
@@ -1878,12 +1878,12 @@ P3=
 [
 ObjTp=Sg
 H=4
-Nm=KEY
+Nm=key
 SgTp=2
 ]
 [
 ObjTp=Sg
 H=5
-Nm=OUT
+Nm=scene
 SgTp=4
 ]

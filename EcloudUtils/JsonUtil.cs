@@ -116,8 +116,16 @@ namespace EcloudUtils
         {
             string ret = "";
             var obj = JObject.Parse(json.ToString());
-            ret = obj["plist_url"].ToString();
-            return ret;
+            if (obj["plist_url"] != null)
+            {
+                ret = obj["plist_url"].ToString();
+                ret = trimQuot(ret);
+                return ret;
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public static string trimQuot(string data)

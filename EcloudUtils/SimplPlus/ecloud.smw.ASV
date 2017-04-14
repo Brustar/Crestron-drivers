@@ -1878,12 +1878,12 @@ P3=
 [
 ObjTp=Sg
 H=4
-Nm=KEY
+Nm=key
 SgTp=2
 ]
 [
 ObjTp=Sg
 H=5
-Nm=OUT
+Nm=scene
 SgTp=4
 ]
