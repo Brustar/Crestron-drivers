@@ -17,13 +17,14 @@ JsonUtil json;
 Http hp;
  
 FUNCTION split(string s,string delim)
-{
-    integer start,pos;
+{  
+	integer start,pos,index;
     if (len(delim) <= 0)
 	{
         return;
 	}
-    start = 1;
+    start = 0;
+	index = 1;
     while(1)
 	{
      	pos = find(delim,s);
@@ -31,17 +32,18 @@ FUNCTION split(string s,string delim)
 		{
           break;
         }
-
-        devices[getlastmodifiedarrayindex()] = mid (s, start, pos - 1);
+        devices[index] = mid (s, 1, pos - 1);
         start = pos + len (delim);
+		s = mid(s, start,len(s)-1);
+		index = index + 1;
     }
-    devices[getlastmodifiedarrayindex()] = mid(s, start,len(s)-1);	
+	devices[index] = mid(s, pos + 1,len(s));	
 }
 
 change scene_id
 {
 	string fileName[64];
-	fileName = "./" + host_id + "_" + scene_id + ".plist";
+	fileName = "\\NVRAM\\" + host_id + "_" + scene_id + ".plist";
 	hp.prepareDownload(fileName);
 			
 }
@@ -51,7 +53,7 @@ Callback Function onResponse(String s)
 	integer size;
 	string url[256];
 	string fileName[64];
-	fileName = host_id + "_" + scene_id + ".plist";
+	fileName = "\\NVRAM\\" + host_id + "_" + scene_id + ".plist";
 
 	url = json.parseURL(s);
 	if(url!="")
