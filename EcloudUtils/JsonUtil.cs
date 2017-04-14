@@ -116,7 +116,7 @@ namespace EcloudUtils
         {
             string ret = "";
             var obj = JObject.Parse(json.ToString());
-            ret = obj["url"].ToString();
+            ret = obj["plist_url"].ToString();
             return ret;
         }
 

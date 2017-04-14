@@ -41,7 +41,7 @@ FUNCTION split(string s,string delim)
 change scene_id
 {
 	string fileName[64];
-	fileName = host_id + "_" + scene_id + ".plist";
+	fileName = "./" + host_id + "_" + scene_id + ".plist";
 	hp.prepareDownload(fileName);
 			
 }

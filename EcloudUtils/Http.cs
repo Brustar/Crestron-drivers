@@ -19,13 +19,17 @@ namespace EcloudUtils
             {
                 url = url + "?" + param;
             }
+            CrestronConsole.PrintLine("url: " + url);
             HttpClient client = new HttpClient();
+            client.Verbose = false;
             HttpClientRequest request = new HttpClientRequest();
             request.KeepAlive = true;
             request.Url.Parse(url);
             request.RequestType = method;
             client.DispatchAsync(request, (hscrs, e) =>
             {
+                CrestronConsole.PrintLine("hscrs: " + hscrs);
+                CrestronConsole.PrintLine("Code: " + hscrs.Code);
                 try
                 {
                     if (hscrs.Code >= 200 && hscrs.Code < 300)
@@ -59,6 +63,7 @@ namespace EcloudUtils
         private string checkPath(String filename)
         {
             String dir = Path.GetDirectoryName(filename);
+            CrestronConsole.PrintLine("dir: " + dir);
             if (!Directory.Exists(dir))
                 Directory.Create(dir);
             if (!File.Exists(filename))
@@ -74,8 +79,9 @@ namespace EcloudUtils
         public void prepareDownload(string fileName)
         {
             string md5 = checkPath(fileName);
-            string url = "http://115.82.151.85:8082/Cloud/download_plist";
-            string param =  "filename=" + fileName + "&md5=" + md5;
+            string url = "http://115.28.151.85:8082/Cloud/download_plist.aspx";
+            string param =  "filename=" + Path.GetFileName(fileName) + "&md5=" + md5;
+            CrestronConsole.PrintLine("param: " + param);
             post(url,param);
         }
 
