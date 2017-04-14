@@ -12,7 +12,7 @@ namespace EcloudUtils
 {
     public class SceneXML
     {
-        private void deleteDTD(string filePath)
+        private string deleteDTD(string filePath)
         {
             string text = "";
             //用一个读出流去读里面的数据
@@ -32,18 +32,15 @@ namespace EcloudUtils
                     line = reader.ReadLine();
                 }
             }
-            //定义一个写入流，将值写入到里面去 
-            using (StreamWriter writer = new StreamWriter(filePath))
-            {
-                writer.Write(text);
-            }
+
+            return text;
         }
 
         private XElement readXML(string filePath)
 		{
-            deleteDTD(filePath);
-            XmlReader reader = XmlReader.Create(filePath);
-            XElement xe = XElement.Load(reader);
+            string xml = deleteDTD(filePath);
+            //XmlReader reader = XmlReader.Create(filePath);
+            XElement xe = XElement.Parse(xml);//.Load(reader);
             return xe;
 		}
 
