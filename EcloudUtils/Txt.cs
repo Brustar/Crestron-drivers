@@ -9,7 +9,7 @@ namespace EcloudUtils
 {
     public class Txt
     {
-        public const string path = "./userdefault.txt";
+        public const string path = "/NVRAM/userdefault.txt";
 
         public static void write(string txtPath, string txtStr)
         {

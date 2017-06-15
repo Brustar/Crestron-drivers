@@ -11,7 +11,7 @@ namespace EcloudUtils
 {
     public class Db
     {
-        public const string dbPath = "./ecloud.sqlite";
+        public const string dbPath = "/NVRAM/ecloud.sqlite";
         //数据库连接
         SQLiteConnection m_dbConnection;
 
@@ -34,7 +34,9 @@ namespace EcloudUtils
         private int save(string sql)
         {  
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            return command.ExecuteNonQuery();
+            int ret = command.ExecuteNonQuery();
+            command.Dispose();
+            return ret;
         }
 
         //在指定数据库中创建一个table
@@ -70,18 +72,29 @@ namespace EcloudUtils
                 }
                 list.Add(ht);
             }
+
+            command.Dispose();
+            reader.Close();
             return list;
         }
 
         public string singleQuery(string sql)
         {
+            string ret = "";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
-                return reader[0].ToString();
+                ret = reader[0].ToString();
             }
-            return "";
+            command.Dispose();
+            reader.Close();
+            return ret;
+        }
+
+        public void close()
+        {
+            m_dbConnection.Close();
         }
     }
 }
