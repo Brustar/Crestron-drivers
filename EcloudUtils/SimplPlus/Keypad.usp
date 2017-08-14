@@ -1,0 +1,67 @@
+#SYMBOL_NAME "Ecloud customer keypad on wall"
+
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+ 
+STRING_PARAMETER host[64];
+STRING_PARAMETER room[64];
+
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+ANALOG_INPUT key_id;		STRING_OUTPUT scene_id;
+
+#BEGIN_PARAMETER_PROPERTIES room
+   propDefaultValue="1";
+#END_PARAMETER_PROPERTIES
+
+#BEGIN_PARAMETER_PROPERTIES host
+   propDefaultValue="255";
+#END_PARAMETER_PROPERTIES
+
+SceneXML xml;
+Http hp;
+JsonUtil json;
+
+CHANGE key_id
+{
+	string fileName[64];
+	fileName = "\\NVRAM\\keypad_" + host + "_" + room + ".plist";
+	hp.prepareDownload(fileName);
+}
+
+Callback Function onResponse(String s)
+{
+	integer size;
+	string url[256];
+	string fileName[64];
+	fileName = "\\NVRAM\\keypad_"+ host + "_" + room + ".plist";
+	url = json.parseURL(s);
+	if(url!="")
+	{
+		size = hp.download(url,fileName);
+		if (size>0)
+		{
+			scene_id=xml.parseKeyToSceneID(fileName,key_id);
+		}	
+	}
+	else
+	{
+		scene_id = xml.parseKeyToSceneID(fileName,key_id);
+	}	
+}
+
+Function Init()
+{
+	RegisterDelegate(hp , OnRes , onResponse);
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	Init();
+}

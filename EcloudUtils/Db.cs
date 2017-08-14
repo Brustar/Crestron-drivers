@@ -15,7 +15,7 @@ namespace EcloudUtils
         //数据库连接
         SQLiteConnection m_dbConnection;
 
-        public void init()
+        private void init()
         {
             if (!File.Exists(dbPath))
             {
@@ -32,10 +32,12 @@ namespace EcloudUtils
         }
 
         private int save(string sql)
-        {  
+        {
+            init();
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             int ret = command.ExecuteNonQuery();
             command.Dispose();
+            close();
             return ret;
         }
 
@@ -59,7 +61,7 @@ namespace EcloudUtils
         //使用sql查询语句，并显示结果
         public ArrayList query(string sql)
         {
-            //string sql = "select * from highscores order by score desc";
+            init();
             ArrayList list = new ArrayList();
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -75,11 +77,13 @@ namespace EcloudUtils
 
             command.Dispose();
             reader.Close();
+            close();
             return list;
         }
 
         public string singleQuery(string sql)
         {
+            init();
             string ret = "";
             SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -89,10 +93,11 @@ namespace EcloudUtils
             }
             command.Dispose();
             reader.Close();
+            close();
             return ret;
         }
 
-        public void close()
+        private void close()
         {
             m_dbConnection.Close();
         }
