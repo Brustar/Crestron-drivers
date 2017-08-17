@@ -11,34 +11,35 @@ namespace EcloudUtils
 {
     public class Db
     {
-        public const string dbPath = "/NVRAM/ecloud.sqlite";
-        //数据库连接
-        SQLiteConnection m_dbConnection;
+        private const string connectString = "Data Source=/NVRAM/ecloud.sqlite;Version=3;";
 
-        private void init()
+        public int initDB(string sql)
         {
-            if (!File.Exists(dbPath))
-            {
-                SQLiteConnection.CreateFile(dbPath);
-            }
-            m_dbConnection = new SQLiteConnection("Data Source=" + dbPath + ";Version=3;");
-            m_dbConnection.Open();
-        }
-
-        public void initDB(string sql)
-        {
-            init();
-            createTable(sql);
+            return createTable(sql);
         }
 
         private int save(string sql)
         {
-            init();
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            int ret = command.ExecuteNonQuery();
-            command.Dispose();
-            close();
-            return ret;
+            using (SQLiteConnection conn = new SQLiteConnection(connectString))
+            {
+                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        int ret = command.ExecuteNonQuery();
+                        return ret;
+                    }
+                    catch (SQLiteException e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
         }
 
         //在指定数据库中创建一个table
@@ -61,45 +62,67 @@ namespace EcloudUtils
         //使用sql查询语句，并显示结果
         public ArrayList query(string sql)
         {
-            init();
-            ArrayList list = new ArrayList();
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            using (SQLiteConnection conn = new SQLiteConnection(connectString))
             {
-                ArrayList ht = new ArrayList();
-                for (int i = 0; i < reader.FieldCount; i++)
+                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
                 {
-                    ht.Add(reader[i].ToString());
+                    try
+                    {
+                        conn.Open();
+                        ArrayList list = new ArrayList();
+                        SQLiteDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            ArrayList ht = new ArrayList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                ht.Add(reader[i].ToString());
+                            }
+                            list.Add(ht);
+                        }
+                        return list;
+                    }
+                    catch (SQLiteException e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
                 }
-                list.Add(ht);
             }
-
-            command.Dispose();
-            reader.Close();
-            close();
-            return list;
+            
         }
 
         public string singleQuery(string sql)
         {
-            init();
-            string ret = "";
-            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            if (reader.Read())
+            using (SQLiteConnection conn = new SQLiteConnection(connectString))
             {
-                ret = reader[0].ToString();
+                using (SQLiteCommand command = new SQLiteCommand(sql, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        string ret = "";
+                        SQLiteDataReader reader = command.ExecuteReader();
+                        if (reader.Read())
+                        {
+                            ret = reader[0].ToString();
+                        }
+                        return ret;
+                    }
+                    catch (SQLiteException e)
+                    {
+                        throw new Exception(e.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
             }
-            command.Dispose();
-            reader.Close();
-            close();
-            return ret;
         }
 
-        private void close()
-        {
-            m_dbConnection.Close();
-        }
     }
 }
