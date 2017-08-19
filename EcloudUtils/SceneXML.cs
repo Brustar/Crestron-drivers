@@ -86,5 +86,34 @@ namespace EcloudUtils
             return elements.First().Elements("integer").Last().Value;
         }
 
+        public Schedule parseSchedule(string filePath)
+        {
+			XmlReaderSettings settings = new XmlReaderSettings();
+			XmlReader reader = XmlReader.Create(filePath, settings);
+			XElement xe = XElement.Load(reader);
+
+			IEnumerable<XElement> elements = from ele in
+				xe.Elements("dict").Elements("array").Last().Elements("dict")
+											 select ele;
+			string start = elements.First().Elements("string").Last().Value;
+
+			string end = elements.First().Elements("string").First().Value;
+			string interval = elements.First().Elements("integer").First().Value;
+			IEnumerable<XElement> weekdays = elements.First().Elements("array").First().Elements("integer");
+
+			ArrayList list = new ArrayList();
+			foreach (var e in weekdays)
+			{
+				list.Add(e.Value);
+			}
+
+            Schedule sch = new Schedule();
+			sch.startTime=start;
+            sch.endTime=end;
+            sch.interval = int.Parse(interval);
+            sch.weekDays=list;
+            return sch;
+        }
+
     }
 }

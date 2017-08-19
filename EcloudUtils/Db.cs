@@ -6,6 +6,7 @@ using System.Collections;
 using Crestron.SimplSharp;
 using Crestron.SimplSharp.SQLite;
 using Crestron.SimplSharp.CrestronIO;
+using Crestron.SimplSharp.CrestronData;
 
 namespace EcloudUtils
 {
@@ -20,23 +21,26 @@ namespace EcloudUtils
 
         private int save(string sql)
         {
+            CrestronConsole.PrintLine("save:" + sql);
+
             using (SQLiteConnection conn = new SQLiteConnection(connectString))
             {
                 using (SQLiteCommand command = new SQLiteCommand(sql, conn))
                 {
                     try
                     {
+                        conn.DefaultTimeout = 100;
                         conn.Open();
+                        
                         int ret = command.ExecuteNonQuery();
+                        CrestronConsole.PrintLine("success:" + ret);
                         return ret;
                     }
                     catch (SQLiteException e)
                     {
-                        throw new Exception(e.Message);
-                    }
-                    finally
-                    {
+                        CrestronConsole.PrintLine("fail.");
                         conn.Close();
+                        throw new Exception(e.Message);
                     }
                 }
             }
@@ -80,15 +84,14 @@ namespace EcloudUtils
                             }
                             list.Add(ht);
                         }
+                        reader.Close();
+                        reader.Dispose();
                         return list;
                     }
                     catch (SQLiteException e)
                     {
-                        throw new Exception(e.Message);
-                    }
-                    finally
-                    {
                         conn.Close();
+                        throw new Exception(e.Message);
                     }
                 }
             }
@@ -110,15 +113,14 @@ namespace EcloudUtils
                         {
                             ret = reader[0].ToString();
                         }
+                        reader.Close();
+                        reader.Dispose();
                         return ret;
                     }
                     catch (SQLiteException e)
                     {
-                        throw new Exception(e.Message);
-                    }
-                    finally
-                    {
                         conn.Close();
+                        throw new Exception(e.Message);
                     }
                 }
             }
