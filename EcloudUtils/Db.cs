@@ -39,6 +39,7 @@ namespace EcloudUtils
                     catch (SQLiteException e)
                     {
                         CrestronConsole.PrintLine("fail.");
+                        command.Dispose();
                         conn.Close();
                         throw new Exception(e.Message);
                     }
@@ -90,6 +91,7 @@ namespace EcloudUtils
                     }
                     catch (SQLiteException e)
                     {
+                        command.Dispose();
                         conn.Close();
                         throw new Exception(e.Message);
                     }
@@ -119,6 +121,7 @@ namespace EcloudUtils
                     }
                     catch (SQLiteException e)
                     {
+                        command.Dispose();
                         conn.Close();
                         throw new Exception(e.Message);
                     }

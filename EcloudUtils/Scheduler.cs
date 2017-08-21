@@ -28,6 +28,9 @@ namespace EcloudUtils
         private int hostID;
         private schType schduleType;
         private ScheduledEventGroup schGroup;
+        public delegate void Handler(SimplSharpString data);
+        public Handler openit { set; get; }
+        public Handler closeit { set; get; }
 
         public Scheduler()
         {
@@ -90,7 +93,7 @@ namespace EcloudUtils
             }
 
             start(schName, startTime, sch.weekDays);
-            start(schName, endTime, sch.weekDays);
+            start("e_"+schName, endTime, sch.weekDays);
         }
 
         public void start(string name, DateTime time,ArrayList weekdays)
@@ -102,7 +105,7 @@ namespace EcloudUtils
             calcRepeat(startSch, weekdays);
             startSch.Acknowledgeable = true;
             startSch.Persistent = false;
-            startSch.AcknowledgeExpirationTimeout.Hour = 1;
+            startSch.AcknowledgeExpirationTimeout.Hour = 24*30*12;
             startSch.UserCallBack += new ScheduledEvent.UserEventCallBack(callback);
             startSch.Enable();
             CrestronConsole.PrintLine("Event create with {0} {1}:{2}", startSch.Name, startSch.DateAndTime.Hour, startSch.DateAndTime.Minute);
@@ -113,7 +116,7 @@ namespace EcloudUtils
             IDictionaryEnumerator enumerator = (IDictionaryEnumerator)this.schGroup.ScheduledEvents.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                if (enumerator.Key.Equals("device" + id) || enumerator.Key.Equals("scene" + id))
+                if (enumerator.Key.Equals("device" + id) || enumerator.Key.Equals("scene" + id) || enumerator.Key.Equals("e_device" + id) || enumerator.Key.Equals("e_scene" + id))
                 {
                     ScheduledEvent eve = (ScheduledEvent)enumerator.Value;
                     eve.Disable();
@@ -175,6 +178,24 @@ namespace EcloudUtils
         public void callback(ScheduledEvent e, ScheduledEventCommon.eCallbackReason r)
         {
             CrestronConsole.PrintLine("scheduler at:{0}", DateTime.Now.ToString());
+            string fileName = "\\NVRAM\\" + this.hostID + "_" + this.schdulerID + ".plist";
+            var xml = new SceneXML();
+            string deviceinfo = xml.parseSceneToDevices(fileName);
+            if (e.Name == "scene" + this.schdulerID || e.Name == "device" + this.schdulerID)
+            {
+                if (openit != null)
+                {
+                    openit(deviceinfo);
+                }
+            }
+            if (e.Name == "e_scene" + this.schdulerID || e.Name == "e_device" + this.schdulerID)
+            {
+                if (openit != null)
+                {
+                    closeit(deviceinfo);
+                }
+            }
+
         }
     }
 }
