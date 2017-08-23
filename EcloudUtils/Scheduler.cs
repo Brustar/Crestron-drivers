@@ -10,8 +10,8 @@ namespace EcloudUtils
 {
     public enum schType
     {
-        device,
-        scene
+        scene = 0x60,
+        device = 0x61
     }
 
     public class Schedule
@@ -40,11 +40,11 @@ namespace EcloudUtils
             }
         }
 
-        public void prepare(int host,int id,schType type)
+        public void prepare(int host,int id,int type)
         {
             this.schdulerID = id;
             this.hostID = host;
-            this.schduleType = type;
+            this.schduleType = (schType)type;
             Http http = new Http();
             string fileName = "\\NVRAM\\" + host + "_" + id + ".plist";
             http.OnRes += response;

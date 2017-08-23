@@ -35,7 +35,8 @@ namespace EcloudUtils
             }
             else
             {
-                StreamReader objReader = new StreamReader(txtPath, System.Text.Encoding.Default);
+                FileStream fs = new FileStream(txtPath, FileMode.Create,FileAccess.Read,FileShare.ReadWrite);
+                StreamReader objReader = new StreamReader(fs, System.Text.Encoding.Default);
                 string sLine = "";
                 while (!objReader.EndOfStream)
                 {
@@ -46,6 +47,7 @@ namespace EcloudUtils
                     }
                 }
                 objReader.Close();
+                fs.Close();
                 return sb.ToString();
             }
         }

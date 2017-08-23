@@ -33,12 +33,12 @@ namespace EcloudUtils
                         conn.Open();
                         
                         int ret = command.ExecuteNonQuery();
-                        CrestronConsole.PrintLine("success:" + ret);
+                        CrestronConsole.PrintLine("success:" + sql);
                         return ret;
                     }
                     catch (SQLiteException e)
                     {
-                        CrestronConsole.PrintLine("fail.");
+                        CrestronConsole.PrintLine("fail:"+sql);
                         command.Dispose();
                         conn.Close();
                         throw new Exception(e.Message);

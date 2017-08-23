@@ -1,0 +1,75 @@
+#SYMBOL_NAME "Ecloud Scheduler"
+
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;
+
+DIGITAL_INPUT	host;			DIGITAL_INPUT	schID;
+DIGITAL_INPUT	sType;
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+STRING_OUTPUT devices[64];
+DIGITAL_OUTPUT action;
+
+
+Scheduler sch;
+
+FUNCTION split(string s,string delim)
+{  
+	integer start,pos,index;
+    if (len(delim) <= 0)
+	{
+        return;
+	}
+    start = 0;
+	index = 1;
+    while(1)
+	{
+     	pos = find(delim,s);
+        if (pos = 0)
+		{
+          break;
+        }
+        devices[index] = mid (s, 1, pos - 1);
+        start = pos + len (delim);
+		s = mid(s, start,len(s)-1);
+		index = index + 1;
+    }
+	devices[index] = mid(s, pos + 1,len(s));	
+}
+
+push schID
+{
+	sch.prepare(host,schID,sType);
+}
+
+Callback Function openit(String s)
+{	
+    split(s,"|");
+	action = 1;
+}
+
+Callback Function closeit(String s)
+{	
+	split(s,"|");
+	action = 0;
+}
+
+
+Function Init()
+{
+	RegisterDelegate(sch,openit,openit);
+	RegisterDelegate(sch,closeit,closeit);
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	Init();
+}
+
