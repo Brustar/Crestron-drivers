@@ -1562,10 +1562,11 @@ H=4
 SmC=156
 Nm=Logic
 ObjVer=1
-CF=2
-mC=2
+CF=1
+mC=3
 C1=23
 C2=26
+C3=27
 ]
 [
 ObjTp=Sm
@@ -1906,6 +1907,22 @@ O3=7
 mP=2
 P1=
 P2=select state from deviceState where name='abc'
+]
+[
+ObjTp=Sm
+H=27
+SmC=103
+Nm=Scheduler.usp
+ObjVer=1
+PrH=4
+CF=1
+n1I=4
+n1O=2
+mI=4
+mO=3
+tO=3
+mP=1
+P1=
 ]
 [
 ObjTp=Sg

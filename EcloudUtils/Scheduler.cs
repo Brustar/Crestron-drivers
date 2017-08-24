@@ -47,6 +47,10 @@ namespace EcloudUtils
             this.schduleType = (schType)type;
             Http http = new Http();
             string fileName = "\\NVRAM\\" + host + "_" + id + ".plist";
+            if ((schType)type == schType.device)
+            {
+                fileName = "\\NVRAM\\schedule_" + host + "_" + id + ".plist";
+            }
             http.OnRes += response;
 
             http.prepareDownload(fileName);
