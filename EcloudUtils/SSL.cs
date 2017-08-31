@@ -104,6 +104,50 @@ namespace EcloudUtils
             });
         }
 
+        public void doRequest(string param,string nestID,string action)
+        {
+            string userdefault = Txt.read(Txt.path);
+            string url = "";
+            string token = "";
+            if (userdefault != "")
+            {
+                JObject obj = JObject.Parse(userdefault);
+                url = obj["urls"]["transport_url"].ToString();
+                token = obj["access_token"].ToString();
+            }
+            
+            
+            HttpsClient client = new HttpsClient();
+            client.Verbose = false;
+            client.PeerVerification = false;
+            client.HostVerification = false;
+            HttpsClientRequest request = new HttpsClientRequest();
+            request.KeepAlive = true;
+            request.Url.Parse(url + "/v2/put/" + action + "." + nestID);
+            
+            request.Header.SetHeaderValue("X-nl-protocol-version", "1");
+            request.Header.SetHeaderValue("Authorization", "Basic " + token);
+
+            request.ContentString = param;
+            request.RequestType = RequestType.Post;
+
+            client.DispatchAsync(request, (hscrs, e) =>
+            {
+                try
+                {
+                    if (hscrs.Code >= 200 && hscrs.Code < 300)
+                    {
+                        // success
+                        CrestronConsole.PrintLine("success.");
+                    }
+                }
+                catch (Exception f)
+                {
+                    CrestronConsole.PrintLine("Connection error:" + f.ToString());
+                }
+            });
+        }
+
         public void handleLogin(string json)
         {
             JObject obj = JObject.Parse(json);

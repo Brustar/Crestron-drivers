@@ -1,0 +1,68 @@
+#SYMBOL_NAME "Ecloud Nest Feedback"
+
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+STRING_PARAMETER nestID[64];
+
+DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;			
+
+#USER_SIMPLSHARP_LIBRARY "EcloudUtils"
+
+DIGITAL_INPUT	fbCoolMode;			
+DIGITAL_INPUT	fbHeatMode;
+ANALOG_INPUT	fbTempreture;
+DIGITAL_INPUT	fbPoweron;			
+DIGITAL_INPUT	fbPoweroff;
+DIGITAL_INPUT	fbFanoff;			
+DIGITAL_INPUT	fbFanAuto;
+DIGITAL_INPUT	fbAway;
+
+Nest nest;
+
+push fbCoolMode
+{	
+	nest.setModeCool();
+}
+
+push fbHeatMode
+{	
+	nest.setModeHeat();
+}
+
+change fbTempreture
+{
+	nest.setTempreture(fbTempreture);	
+}
+
+push fbPoweron
+{	
+	nest.setModeCool();
+}
+ 
+push fbPoweroff
+{	
+	nest.setPowerOff();
+}
+
+push fbFanoff
+{	
+	nest.setFanOn();
+}
+
+push fbFanAuto
+{	
+	nest.setFanAuto();
+}
+
+push fbAway
+{	
+	nest.setAway();
+}
+
+Function Main()
+{
+	WaitForInitializationComplete();
+	nest.nestID = nestID;
+}
