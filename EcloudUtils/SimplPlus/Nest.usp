@@ -35,39 +35,20 @@ push enable
 {
 	https.doPost(username,password);
 }
-/*
-CHANGE room
-{
-	while(1)
-	{
-		wait(100*60*10)
-		{
-			https.doPost(username,password);
-		}
-	}
-}
-*/ 
+ 
 Callback Function onResponse(String s)
 {	
 	string sql[100];
 	string states[32];
 	INTEGER index;
 	string flag[32];
-	sql="create table if not exists nest(room varchar(20),temperatue integer,humidity integer)";	
+	sql="create table if not exists nest(room varchar(20) PRIMARY KEY NOT NULL UNIQUE,deviceid varchar(20),temperatue integer,humidity integer)";	
 	db.initDB(sql);
     states = https.handleNestStatus(s,room);
 	trace("states:%s",states);
 	if(states != "")
 	{
-		sql = "select room from nest where room = '"+room+"'";
-		flag = db.singleQuery(sql);
-		if(flag != "")
-		{	
-			index = FIND(",", states);
-			sql = "update nest set temperatue=" + MID(states,1,index) + ",humidity=" + MID(states,index+1,LEN(states)) + " where room='" + room + "'";
-		}else{
-			sql = "insert into nest values('" + room + "'," + states + ")";
-		}
+		sql = "insert or replace into nest values("+states+")";
 		status = db.insert(sql);
 	}else{
 		status = -1;

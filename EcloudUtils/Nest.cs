@@ -30,6 +30,8 @@ namespace EcloudUtils
         private void control(string param,string action)
         {
             SSL ssl = new SSL();
+            Db db = new Db();
+            this.nestID = db.singleQuery("select deviceid from nest where room = '" + this.room + "'");
             ssl.doRequest(param, this.nestID , action);
         }
 

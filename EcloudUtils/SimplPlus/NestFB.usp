@@ -4,7 +4,7 @@
 #ENABLE_STACK_CHECKING
 #ENABLE_TRACE
 
-STRING_PARAMETER nestID[64];
+STRING_PARAMETER room[64];
 
 DIGITAL_INPUT	_SKIP_;			DIGITAL_OUTPUT	_SKIP_;			
 
@@ -64,5 +64,5 @@ push fbAway
 Function Main()
 {
 	WaitForInitializationComplete();
-	nest.nestID = nestID;
+	nest.room = room;
 }
